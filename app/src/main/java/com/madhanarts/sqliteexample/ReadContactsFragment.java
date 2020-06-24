@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,7 +15,7 @@ import android.widget.TextView;
 
 public class ReadContactsFragment extends Fragment {
 
-    private TextView textDisplay;
+    public TextView textDisplay;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -23,35 +25,21 @@ public class ReadContactsFragment extends Fragment {
 
         textDisplay = view.findViewById(R.id.text_contact_display);
 
-        readContacts();
-
-
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        readContacts();
     }
 
     private void readContacts()
     {
-        String contactInfo = "";
 
-        ContactDbHelper contactDbHelper = new ContactDbHelper(getActivity());
+        BackgroundTask backgroundTask = new BackgroundTask(getActivity());
 
-        SQLiteDatabase database = contactDbHelper.getReadableDatabase();
-
-        Cursor cursor = contactDbHelper.readContacts(database);
-
-        while (cursor.moveToNext())
-        {
-            String id = Integer.toString(cursor.getInt(cursor.getColumnIndex(ContactContract.ContactEntry.CONTACT_ID)));
-            String name = cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.NAME));
-            String email = cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.EMAIL));
-
-            contactInfo = contactInfo + "\n\n" + "ID : " + id +
-                    "\nName : " + name + "\nEmail : " + email;
-
-        }
-        textDisplay.setText(contactInfo);
-
-        contactDbHelper.close();
+        backgroundTask.execute("get_contacts");
 
     }
 

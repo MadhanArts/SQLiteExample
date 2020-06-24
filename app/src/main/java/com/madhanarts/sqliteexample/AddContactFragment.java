@@ -33,26 +33,28 @@ public class AddContactFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                String id = contactId.getText().toString();
-                String name = contactName.getText().toString();
-                String email = contactMail.getText().toString();
-
-                ContactDbHelper contactDbHelper = new ContactDbHelper(getActivity());
-
-                SQLiteDatabase database = contactDbHelper.getWritableDatabase();
-
-                contactDbHelper.addContact(Integer.parseInt(id), name, email, database);
-
-                contactDbHelper.close();
-
-                contactId.setText("");
-                contactName.setText("");
-                contactMail.setText("");
-                Toast.makeText(getActivity(), "Contact saved successfully", Toast.LENGTH_SHORT).show();
+                save();
 
             }
         });
 
         return view;
     }
+
+    private void save()
+    {
+
+        String id = contactId.getText().toString();
+        String name = contactName.getText().toString();
+        String email = contactMail.getText().toString();
+
+        BackgroundTask backgroundTask = new BackgroundTask(getActivity());
+
+        backgroundTask.execute("add_contact", id, name, email);
+
+        contactId.setText("");
+        contactName.setText("");
+        contactMail.setText("");
+    }
+
 }
