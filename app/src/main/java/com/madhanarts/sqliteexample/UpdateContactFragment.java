@@ -47,15 +47,10 @@ public class UpdateContactFragment extends Fragment {
         String name = contactName.getText().toString();
         String email = contactMail.getText().toString();
 
-        ContactDbHelper contactDbHelper = new ContactDbHelper(getActivity());
+        BackgroundTask backgroundTask = new BackgroundTask(getActivity());
 
-        SQLiteDatabase database = contactDbHelper.getWritableDatabase();
+        backgroundTask.execute("update_contact", id, name, email);
 
-        contactDbHelper.updateContact(Integer.parseInt(id), name, email, database);
-
-        contactDbHelper.close();
-
-        Toast.makeText(getActivity(), "Contact Updated...", Toast.LENGTH_SHORT).show();
 
         contactId.setText("");
         contactName.setText("");

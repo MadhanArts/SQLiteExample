@@ -88,6 +88,39 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
             return "get_contacts";
 
         }
+        else if (params[0].equals("update_contact"))
+        {
+            ContactDbHelper contactDbHelper = new ContactDbHelper(context);
+
+            SQLiteDatabase database = contactDbHelper.getWritableDatabase();
+
+            String id = params[1];
+            String name = params[2];
+            String email = params[3];
+
+            contactDbHelper.updateContact(Integer.parseInt(id), name, email, database);
+
+            contactDbHelper.close();
+
+            return "Contact updated";
+
+        }
+        else if (params[0].equals("delete_contact"))
+        {
+
+            ContactDbHelper contactDbHelper = new ContactDbHelper(context);
+
+            SQLiteDatabase database = contactDbHelper.getWritableDatabase();
+
+            int id = Integer.parseInt(params[1]);
+
+            contactDbHelper.deleteContact(id, database);
+
+            contactDbHelper.close();
+
+            return "Contact deleted";
+
+        }
 
         return null;
     }

@@ -38,15 +38,12 @@ public class DeleteContactFragment extends Fragment {
 
     private void deleteContact()
     {
-        ContactDbHelper contactDbHelper = new ContactDbHelper(getActivity());
 
-        SQLiteDatabase database = contactDbHelper.getWritableDatabase();
+        String id = deleteId.getText().toString();
 
-        int id = Integer.parseInt(deleteId.getText().toString());
+        BackgroundTask backgroundTask = new BackgroundTask(getActivity());
 
-        contactDbHelper.deleteContact(id, database);
-
-        contactDbHelper.close();
+        backgroundTask.execute("delete_contact", id);
 
         deleteId.setText("");
 
